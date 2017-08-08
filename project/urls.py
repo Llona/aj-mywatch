@@ -6,7 +6,7 @@ from watch_list.views import watch_list_page, watch_data, watch_all_data, watch_
 from django.views.static import serve
 from .settings import MEDIA_ROOT
 
-from welcome.views import index
+from welcome.views import index, health
 
 urlpatterns = [
     url(r'^my_watch/$', watch_list_page),
@@ -23,7 +23,7 @@ urlpatterns = [
 
     url(r'^auto_update_item/', auto_update_item_only),
     url(r'^$', index),
-#    url(r'^health$', health),
+    url(r'^health$', health),
 
 
     url(r'^admin/', include(admin.site.urls)),
