@@ -38,8 +38,9 @@ PAGE_PRE_RANGE = 3
 PAGE_NEXT_RANGE = 3
 
 
-def index(request):
+def index_home(request):
     news_h = News.objects.all().order_by('-date')
+    anime_h = Anime.objects.all().order_by('-modify_date')[0:9]
 
     return render_to_response('home.html', locals(), context_instance=RequestContext(request))
 
