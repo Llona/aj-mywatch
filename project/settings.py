@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
+    'welcome',
 )
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/my_watch/'
