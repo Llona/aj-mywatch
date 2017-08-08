@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}my watch list{% endblock %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <table align="center">
+        <tr>
+            <th align="left"><input type="submit" value="確定" name="renew_all_item"></th>
+            <th align="left"><input type="submit" value="新增" name="add_item"></th>
+            <th align="left"><input type="submit" value="刪除所選" name="delete_item"></th>
+        </tr>
+        <tr>
+            <th><label>選取</label></th>
+            <th><label>名稱</label></th>
+            <th><label>觀看集數</label></th>
+            <th><label>狀態</label></th>
+            <th><label>觀看日期</label></th>
+            <th><label>總集數</label></th>
+        </tr>
+        {% for i in one_page_data %}
+            <tr>
+                <th align="center"><input type="checkbox" name="selected_anime" value="{{ i.anime.id }}"></th>
+                <th align="center"><a href="/watch_data/{{ i.anime.id  }}/">{{ i.anime.name  }}</a></th>
+                <td align="center"><input type="text" value="{{ i.num_of_chapter }}" placeholder="輸入目前觀看集數" name="num_{{ forloop.counter }}"></td>
+                <td>
+                    <select name="watch_state_{{ forloop.counter }}">
+                        {% ifequal i.watch_state 1 %}
+                            <option value=1 selected>未觀看</option>
+                            <option value=2>觀看中</option>
+                            <option value=3>已看完</option>
+                        {% else %}
+                            {% ifequal i.watch_state 2 %}
+                                <option value=1>未觀看</option>
+                                <option value=2 selected>觀看中</option>
+                                <option value=3>已看完</option>
+                            {% else %}
+                                {% ifequal i.watch_state 3 %}
+                                    <option value=1>未觀看</option>
+                                    <option value=2>觀看中</option>
+                                    <option value=3 selected>已看完</option>
+                                {% endifequal %}
+                            {% endifequal %}
+                        {% endifequal %}
+                    </select>
+                </td>
+                <td align="center">{{ i.watch_last_date }}</td>
+                <td align="center">{{ i.anime.total }}</td>
+
+                <td><input type="hidden" value="{{ i.anime.id }}" name="anime_id_{{ forloop.counter }}"></td>
+                <td><input type="hidden" value="{{ i.num_of_chapter }}" name="num_of_chapter_ori_{{ forloop.counter }}"></td>
+                <td><input type="hidden" value="{{ i.watch_state }}" name="watch_state_ori_{{ forloop.counter }}"></td>
+                {% if forloop.first %}<td><input type="hidden" value="{{ forloop.revcounter }}" name="len_of_count"></td>{% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+</form>
+
+{# pages #}
+<div class="center">
+    <p>共 {{pages.count}} 個項目 ， 目前第 {{one_page_data.number}} 頁 ， 共 {{pages.num_pages}} 頁</p>
+
+    <ul class="pagination">
+        {# previous page，uses has_previous #}
+        <li><a href="?page={% if one_page_data.has_previous %}{{one_page_data.previous_page_number}}{% else %}{{one_page_data.number}}{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+
+        {# get all page #}
+        {% for page in pages.page_range %}
+            {% ifequal  page one_page_data.number %}
+                <li><a class="active" href="?page={{page}}">{{page}}</a></li>
+            {% else %}
+                <li><a href="?page={{page}}">{{page}}</a></li>
+            {% endifequal %}
+        {% endfor %}
+
+        {# next page，uses has_next #}
+        <li><a href="?page={% if one_page_data.has_next %}{{one_page_data.next_page_number}}{% else %}{{one_page_data.number}}{% endif %}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+    </ul>
+</div>
+{% endblock %}

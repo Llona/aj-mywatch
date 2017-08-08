@@ -1,0 +1,100 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Signup" %}{% endblock %}
+{% block content %}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+            <h4 class="modal-title">
+                {% trans "Sign Up" %}
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+            <!--<form novalidate="novalidate" id="formSignUp">-->
+                <div id="errorSignUp">
+
+                </div>
+                <div class="form-group">
+                    <label for="id_username" class="control-label">使用者名稱</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input class="form-control" autofocus="autofocus" id="id_username" name="username" placeholder="您的使用者名稱" type="text" />
+                        <!--<input class="form-control" placeholder="username" name="emailSignUp" id="emailSignUp" type="text">-->
+                    </div>
+                    <div style="color:#C0392B;">{{ form.username.errors }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="id_email">E-mail</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                        <!--<input class="form-control" placeholder="email@example.com" name="emailSignUp" id="emailSignUp" type="email">-->
+                        <input class="form-control" id="id_email" name="email" placeholder="email@example.com" type="email" />
+                    </div>
+                    <div style="color:#C0392B;">{{ form.email.errors }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="id_password1">密碼:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <!--<input class="form-control" placeholder="password" name="passwordSignUp" id="passwordSignUp" type="password">-->
+                        <input class="form-control" id="id_password1" name="password1" placeholder="請輸入密碼" type="password" />
+                    </div>
+                    <div style="color:#C0392B;">{{ form.password1.errors }}</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="id_password2">確認密碼:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <!--<input class="form-control" placeholder="confirm password" name="passwordConfirmSignUp" id="passwordConfirmSignUp" type="password">-->
+                        <input class="form-control" id="id_password2" name="password2" placeholder="請再次輸入密碼" type="password" />
+                    </div>
+                    <div style="color:#C0392B;">{{ form.password2.errors }}</div>
+                </div>
+
+                {% comment %}
+                <div class="checkbox">
+                    <label>
+                        <input id="term" type="checkbox">
+                        I have read and accepted  <a target="_blank" href="#">the terms and conditions of use.</a>
+                    </label>
+                </div>
+                {% endcomment %}
+
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <button type="submit" id="btnSignUp" class="btn btn-primary" style="width: 127px;">{% trans "Sign Up" %}</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <small>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</small>
+        </div>
+    </div>
+</div>
+
+
+
+{% comment %}
+<h1>{% trans "Sign Up" %}</h1>
+
+<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+</form>
+{% endcomment %}
+
+{% endblock %}

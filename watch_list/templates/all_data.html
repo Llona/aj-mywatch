@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}my watch list{% endblock %}
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/watch_list.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% comment %}
+    <div align="center">
+        {% include 'pages.html'%}
+    </div>
+    {% endcomment %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-primary">
+                <div class="panel-heading ">
+                    <h4>所有項目</h4>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <!--<div class="form-inline pull-left">-->
+                        <div style="padding: 1px 1px 1px;">
+                            <div class="input-group">
+                                <span class="input-group-btn"><button type="submit" class="btn btn-primary" name="add_to_mywatch">加入列表</button></span>
+                                <div class="col-xs-10 col-sm-3">
+                                    <select class="form-control" id="sort_type" name="sort_type" onChange="link(this.form)">
+                                        {% for v,k in select_sort_odic.items %}
+                                            <option value={{v}} {% ifequal v sort_str %}selected{% endifequal%}>{{k}}</option>
+                                        {% endfor %}
+                                    </select>
+                                 </div>
+                            </div>
+                        </div>
+                        <table align="center" class="table table-striped">
+                            {% for i in current_page_data %}
+                                {% if forloop.first %}
+                                    <tr>
+                                        <th><label>#</label></th>
+                                        <th><label>名稱</label></th>
+                                        <th style="min-width:50px"><label>總集數</label></th>
+                                        <th style="min-width:50px"><label>出版日期</label></th>
+                                    </tr>
+                                {% endif %}
+                                    <tr>
+                                        {% if i.id in user_animid_list %}
+                                            <td><input type="checkbox" name="selected_anime" value="{{ i.id }}" checked="checked" disabled></td>
+                                        {% else %}
+                                            <td><input type="checkbox" name="selected_anime" value="{{ i.id }}"></td>
+                                        {% endif %}
+                                        <th ><a href="/watch_data/{{ i.id }}/">{{ i.name }}</a></th>
+                                        <td >{{ i.total }}</td>
+                                        <td >{{ i.publication_date }} </td>
+                                    </tr>
+                            {% endfor %}
+                        </table>
+                        <hr>
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-primary" name="add_to_mywatch">加入列表</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div align="center">
+                {% include 'pages.html'%}
+            </div>
+        </div>
+    </div>
+</div>
+<script language=javascript>
+function link(obj){
+    //var e = document.getElementById("sort_type").value;
+    //var pn = document.getElementById("page_number").href;
+    //document.getElementById("page_number").href = pn + "&sort=" + e;
+    //alert(pn);
+    obj.submit();
+}
+</script>
+{% endblock %}

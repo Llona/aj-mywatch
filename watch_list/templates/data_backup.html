@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %}Data{% endblock %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {% ifequal is_owner 1 %}
+        <table>
+            <tr>
+                <th align="left"> <label>名稱</label> </th>
+                <th align="left"> {{ anime_data_model_h.name  }}</th>
+            </tr>
+            {% ifequal is_creator 1 %}
+                <tr>
+                    <th align="left"> <label>觀看集數</label> </th>
+                    <td align="left"> {{ f.watch_num_of_chapter }} </td>
+                    <td align="left"> {{ f.watch_num_of_chapter.errors }} </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <th align="left"> <label>觀看集數</label> </th>
+                    <td align="left"> <input type="text" value="{{ watch_data_model.num_of_chapter }}" name="num_of_chapter"></td>
+                </tr>
+            {% endifequal %}
+            <tr>
+                <th align="left"> <label for=>觀看狀態</label></th>
+                <td><select name="watch_state">
+                    {% ifequal watch_data_model.watch_state 1 %}
+                        <option value=1 selected>未觀看</option>
+                        <option value=2>觀看中</option>
+                        <option value=3>已看完</option>
+                    {% else %}
+                        {% ifequal watch_data_model.watch_state 2 %}
+                            <option value=1>未觀看</option>
+                            <option value=2 selected>觀看中</option>
+                            <option value=3>已看完</option>
+                        {% else %}
+                            {% ifequal watch_data_model.watch_state 3 %}
+                                <option value=1>未觀看</option>
+                                <option value=2>觀看中</option>
+                                <option value=3 selected>已看完</option>
+                            {% endifequal %}
+                        {% endifequal %}
+                    {% endifequal %}
+                </select></td>
+            </tr>
+            {% ifequal is_creator 1 %}
+                <tr>
+                    <th align="left"> <label>總集數</label> </th>
+                    <td align="left"> {{ f.total }} </td>
+                    <td align="left"> {{ f.total.errors }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>類型</label> </th>
+                    <td align="left"> {{ f.type }} </td>
+                    <td align="left"> {{ f.type.errors }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>發行日期</label> </th>
+                    <td align="left"> {{ f.publication_date }} </td>
+                    <td align="left"> {{ f.publication_date.errors }} </td>
+                </tr>
+
+                <!--hide original data for check user is modify or not-->
+                <tr><td><input type="hidden" value="{{ watch_data_model.anime.total }}" name="total_ori"></td></tr>
+                <tr><td><input type="hidden" value="{{ watch_data_model.anime.type }}" name="type_ori"></td></tr>
+                <tr><td><input type="hidden" value="{{ watch_data_model.anime.publication_date|date:"Y-m-d" }}" name="publication_date_ori"></td></tr>
+            {% else %}
+                <tr>
+                    <th align="left"> <label>總集數</label> </th>
+                    <td align="left"> {{ anime_data_model_h.total }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>類型</label> </th>
+                    <td align="left"> {{ anime_data_model_h.type }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>發行日期</label> </th>
+                    <td align="left"> {{ anime_data_model_h.publication_date }} </td>
+                </tr>
+            {% endifequal %}
+            <tr>
+                <th align="left"> <label>最近觀看日期</label> </th>
+                <td align="left"> {{ watch_data_model.watch_last_date }} </td>
+            </tr>
+            <tr>
+                <th align="left"> <label>最近修改日期</label> </th>
+                <td align="left"> {{ watch_data_model.anime.modify_date }} </td>
+            </tr>
+            <tr>
+                <th align="left"> <label>Creator</label> </th>
+                <td align="left"> {{ watch_data_model.anime.creator }} </td>
+            </tr>
+            <tr><td><input type="hidden" value="{{ watch_data_model.num_of_chapter }}" name="num_of_chapter_ori"></td></tr>
+            <tr><td><input type="hidden" value="{{ watch_data_model.watch_state }}" name="watch_state_ori"></td></tr>
+        </table>
+        <input type="submit" value="送出" name="renew_data">
+        <input type="submit" value="取消" name="cancel">
+    {% else %}
+        <table>
+            <tr>
+                <th align="left"> <label>名稱</label> </th>
+                <th align="left"> {{ anime_data_model_h.name  }}</th>
+            </tr>
+            {% ifequal is_creator 1 %}
+                <tr>
+                    <th align="left"> <label>總集數</label> </th>
+                    <td align="left"> {{ f.total }} </td>
+                    <td align="left"> {{ f.total.errors }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>類型</label> </th>
+                    <td align="left"> {{ f.type }} </td>
+                    <td align="left"> {{ f.type.errors }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>發行日期</label> </th>
+                    <td align="left"> {{ f.publication_date }} </td>
+                    <td align="left"> {{ f.publication_date.errors }} </td>
+                </tr>
+
+                <!--hide original data for check user is modify or not-->
+                <tr><td><input type="hidden" value="{{ watch_data_model.anime.total }}" name="total_ori"></td></tr>
+                <tr><td><input type="hidden" value="{{ watch_data_model.anime.type }}" name="type_ori"></td></tr>
+                <tr><td><input type="hidden" value="{{ watch_data_model.anime.publication_date|date:"Y-m-d" }}" name="publication_date_ori"></td></tr>
+            {% else %}
+                <tr>
+                    <th align="left"> <label>總集數</label> </th>
+                    <td align="left"> {{ anime_data_model_h.total }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>類型</label> </th>
+                    <td align="left"> {{ anime_data_model_h.type }} </td>
+                </tr>
+                <tr>
+                    <th align="left"> <label>發行日期</label> </th>
+                    <td align="left"> {{ anime_data_model_h.publication_date }} </td>
+                </tr>
+            {% endifequal %}
+            <tr>
+                <th align="left"> <label>最近修改日期</label> </th>
+                <td align="left"> {{ anime_data_model_h.modify_date }} </td>
+            </tr>
+            <tr>
+                <th align="left"> <label>Creator</label> </th>
+                <td align="left"> {{ anime_data_model_h.creator }} </td>
+            </tr>
+        </table>
+        {% ifequal is_creator 1 %}
+            <input type="submit" value="送出" name="renew_data">
+        {% endifequal %}
+        <input type="submit" value="離開" name="cancel">
+    {% endifequal %}
+</form>
+{% endblock %}

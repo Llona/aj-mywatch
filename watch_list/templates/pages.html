@@ -1,0 +1,22 @@
+{# <br>共 {{pages_h.count}} 個項目 ， 目前第 {{one_page_data.number}} 頁 ， 共 {{pages_h.num_pages}} 頁</br> #}
+<ul class="pagination pagination-sm">
+    {% ifnotequal page_range|first 1 %}
+        <li><a href="?page=1&sort={{sort_str}}" aria-label="Previous"><span aria-hidden="true">&laquo;&laquo;</span></a></li>
+    {% endifnotequal %}
+    {% if current_page_data.has_previous %}
+        <li><a href="?page={{current_page_data.previous_page_number}}&sort={{sort_str}}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+    {% endif %}
+    {% for page in page_range %}
+        {% ifequal  page current_page_data.number %}
+            <li><a class="active" href="?page={{page}}&sort={{sort_str}}">{{page}}</a></li>
+        {% else %}
+            <li><a href="?page={{page}}&sort={{sort_str}}">{{page}}</a></li>
+        {% endifequal %}
+    {% endfor %}
+    {% if current_page_data.has_next %}
+        <li><a href="?page={{current_page_data.next_page_number}}&sort={{sort_str}}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+    {% endif %}
+    {% ifnotequal page_range|last pages_h.num_pages %}
+        <li><a href="?page={{pages_h.num_pages}}&sort={{sort_str}}" aria-label="Next"><span aria-hidden="true">&raquo;&raquo;</span></a></li>
+    {% endifnotequal %}
+</ul>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Search or Add item{% endblock %}
+{% load staticfiles %}
+{% block content %}
+<section>
+  <div class="jumbotron text-center" style="background-color:#ECEEEE">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs12">
+            <div class=""><h1>AJ-MyWatch</h1></div>
+          <div style="color:#9A9A9A;margin-bottom:30px;"><p>您可以記下電影、 影集、小說...等等的觀看記錄, 追劇或閱讀時再也不會忘記看到第幾集囉!</p></div>
+            <p><a class="btn btn-primary btn-lg" href="/my_watch/" role="button">開始使用 »</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+    <div class="container">
+        <!--<div class="row" style="margin-bottom:50px;"></div>-->
+        <div class="col-xs-4 col-xs-offset-1">
+            <h3><b>News</b><span style="font-size:16px;margin-left:20px"><b>更新情報</b></span></h3>
+            <div style="width:400px;height:300px;overflow:auto;word-break:break-all">
+                {% for i in news_h %}
+                    <div class="dcolor" style="margin-bottom:10px;"><b>{{ i.date }}</b><span style="margin-left:20px">{{ i.news_type }}</span></div>
+                    <div class="dcolor" style="margin-bottom:20px">{{ i.content }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

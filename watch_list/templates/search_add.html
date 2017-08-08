@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Search or Add item{% endblock %}
+{% load staticfiles %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <form method="get" action="/watch_data/">
+            {% csrf_token %}
+            <h4 align="center">
+                從所有項目找尋您正在看的項目 並加到我的列表:
+            </h4><br>
+            <p align='center'><button class="btn btn-primary" type="submit">所有項目 »</button></p>
+        </form>
+    </div>
+    <hr>
+	<div class="row">
+        <form method="get" action="/item_search/">
+            {% csrf_token %}
+            <div class="col-sm-6 col-sm-offset-3">
+                <h4 align="center">
+                    搜尋已有的項目 並加到我的列表:
+                </h4>
+                <div class="input-group">
+                    <input type="search" class="form-control" name="keyword" placeholder="Search" >
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">搜尋</button>
+                    </span>
+                </div>
+            </div>
+        </form><br>
+	</div>
+    <hr>
+    <div class="row">
+        <form method="get" action="/watch_add/">
+            {% csrf_token %}
+            <h4 align="center">
+                如果找不到項目, 新增一個吧
+            </h4><br>
+            <p align='center'><button class="btn btn-primary" type="submit">新增新項目 »</button></p>
+        </form>
+    </div>
+</div>
+{% endblock %}

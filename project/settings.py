@@ -42,9 +42,37 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'watch_list',
     'debug_toolbar',
+    # 'accounts',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
     'welcome',
 )
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/my_watch/'
+LOGOUT_URL = '/accounts/login/'
+
+# allauth setting: reference: http://django-allauth.readthedocs.io/en/latest/configuration.html
+# ACCOUNT_LOGOUT_ON_GET= False
+ACCOUNT_LOGOUT_REDIRECT_URL ="/"
+# The user is required to hand over an e-mail address when signing up.
+ACCOUNT_EMAIL_REQUIRED = True
+# Determines the e-mail verification method during signup: "mandatory", "optional", or "none"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+# uses mailgun for send mail
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = 'key-78a64ead8b0c52ea18423a436a4ee2f9'
+MAILGUN_SERVER_NAME = 'sandbox5a5bbc85441d4cea88c496bba9504faa.mailgun.org'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,6 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # admin page uses local language ex. chinese	
     'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
@@ -110,3 +139,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

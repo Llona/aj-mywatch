@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}my watch list{% endblock %}
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/watch_list.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+<!--<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>-->
+    {# pages #}
+    <div align="center">
+        {% include 'pages.html' %}
+    </div>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <form action="" class="form-inline" method="post">
+                    {% csrf_token %}
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h4>我的觀看列表</h4></div>
+                        <div class="panel-body">
+                            <div class="pull-right">
+                                <!--<div class="btn-group">-->
+                                <button type="submit" class="btn btn-primary" name="renew_all_item">確定</button>
+                                <button type="submit" class="btn btn-default" name="add_item">新增</button>
+                                <button type="reset" class="btn btn-default" name="cancel">取消</button>
+                                <button type="submit" class="btn btn-danger" name="delete_item">移除</button>
+                                <!--</div>-->
+                            </div>
+                            <div class="table-container">
+                                <table class="table">
+                                    {% if not current_page_data %}
+                                    <tr>
+                                        <td><h4>No data</h4></td>
+                                    </tr>
+                                    </table>
+                                    {% else %}
+                                        {% for i in current_page_data %}
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="selected_anime" value="{{ i.anime.id }}">
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        <input type="hidden" value="{{ i.anime.id }}" name="anime_id_{{ forloop.counter }}">
+                                                        <input type="hidden" value="{{ i.num_of_chapter }}" name="num_of_chapter_ori_{{ forloop.counter }}">
+                                                        <input type="hidden" value="{{ i.watch_state }}" name="watch_state_ori_{{ forloop.counter }}">
+                                                        {% if forloop.first %}<input type="hidden" value="{{ forloop.revcounter }}" name="len_of_count">{% endif %}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="media">
+                                                        <a href="/watch_data/{{ i.anime.id }}/" class="pull-left">
+                                                            <!--<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">-->
+                                                            {% if i.anime.cover %}
+                                                                <img class="img-thumbnail img-responsive media-photo" src="{{ i.anime.cover.url }}" width=120>
+                                                            {% else %}
+                                                                <img class="img-thumbnail img-responsive media-photo" src="{% static 'images/nocover.png' %}" width=120>
+                                                            {% endif %}
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <h4 class="word-break title col-md-12 col-sm-12">
+                                                                <a href="/watch_data/{{ i.anime.id  }}/">
+                                                                <span class="pull-left">{{ i.anime.name  }}</span></a>
+                                                                {% if i.anime.origin_name %}
+                                                                    <span class="sub-title"><em>&nbsp;&nbsp;-&nbsp;&nbsp;{{ i.anime.origin_name  }}</em></span>
+                                                                {% endif %}
+                                                            </h4>
+                                                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                                            <!--<div style="padding: 1px 1px 1px;">-->
+                                                                <!--<input type="text" class="form-control" value="{{ i.num_of_chapter }}" name="num_{{ forloop.counter }}" placeholder="觀看集數">-->
+                                                                <div class="input-group input-group-sm">
+                                                                    <span class="input-group-btn"><button type="button" class="btn btn-default" id="{{ forloop.counter }}" onclick='change_input(this.id,"decrease")'>-</button></span>
+                                                                    <input type="text" class="form-control" value="{{ i.num_of_chapter }}" id="num_{{ forloop.counter }}" name="num_{{ forloop.counter }}" size=5 placeholder="觀看集數">
+                                                                    <span class="input-group-btn"><button type="button" class="btn btn-default" id="{{ forloop.counter }}" onclick='change_input(this.id,"increase")'>+</button></span>
+                                                                </div>
+                                                            <!--</div>-->
+                                                            </div>
+                                                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                                            <!--<div style="padding: 1px 1px 1px;">-->
+                                                                <!--<select class="form-control" name="watch_state_{{ forloop.counter }}">-->
+                                                                <div class="input-group input-group-sm">
+                                                                <select class="form-control" name="watch_state_{{ forloop.counter }}">
+                                                                    {% ifequal i.watch_state 1 %}
+                                                                        <option value=1 selected>未觀看</option>
+                                                                        <option value=2>觀看中</option>
+                                                                        <option value=3>已看完</option>
+                                                                    {% else %}
+                                                                        {% ifequal i.watch_state 2 %}
+                                                                            <option value=1>未觀看</option>
+                                                                            <option value=2 selected>觀看中</option>
+                                                                            <option value=3>已看完</option>
+                                                                        {% else %}
+                                                                            {% ifequal i.watch_state 3 %}
+                                                                                <option value=1>未觀看</option>
+                                                                                <option value=2>觀看中</option>
+                                                                                <option value=3 selected>已看完</option>
+                                                                            {% endifequal %}
+                                                                        {% endifequal %}
+                                                                    {% endifequal %}
+                                                                </select>
+                                                                </div>
+                                                            </div>
+                                                            <!--<div class="pull-right col-xs-2 col-sm-2 col-md-1">-->
+                                                            <div class="pull-right col-xs-2 col-sm-2 col-md-1">
+                                                                <em><span class="total">{{ i.anime.total }}</span></em>
+                                                            </div>
+                                                            <div class="pull-right">
+                                                                <span class="badge pull-right">{{ i.watch_last_date }}</span>
+                                                            </div>
+                                                            <hr>
+                                                            <br><br>
+                                                            <span class="summary word-break col-xs-12">
+                                                            {% if i.anime.summary %}
+                                                                {{ i.anime.summary }}
+                                                            {% else %}
+                                                                暫無簡介
+                                                            {% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                    <hr>
+                                    <div class="pull-right">
+                                        <!--<div class="btn-group">-->
+                                        <button type="submit" class="btn btn-primary" name="renew_all_item">確定</button>
+                                        <button type="submit" class="btn btn-default" name="add_item">新增</button>
+                                        <button type="reset" class="btn btn-default" name="cancel">取消</button>
+                                        <button type="submit" class="btn btn-danger" name="delete_item">移除</button>
+                                        <!--</div>-->
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div align="center">
+                        {% include 'pages.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script language=javascript>
+function change_input(button_id, button_type){
+    var text_val=document.getElementById("num_"+button_id).value;
+    split_text = parseFloat(text_val.match(/[0-9.]+$/));
+    if (!isNaN(split_text) && split_text >= 0){
+        if (button_type == "decrease"){
+            if (split_text > 0){
+                split_text=parseInt(split_text)-1;
+            }
+        }
+        else{
+            if (button_type == "increase"){
+                split_text=parseInt(split_text)+1;
+            }
+            else{
+                alert('JavaScript has some error! 請連絡管理員');
+                return
+            }
+        }
+    }
+    else{
+        split_text=0;
+    }
+    text_val=text_val.replace(/[0-9.]+$/, split_text)
+    document.getElementById("num_"+button_id).value=text_val
+}
+</script>
+{% endblock %}

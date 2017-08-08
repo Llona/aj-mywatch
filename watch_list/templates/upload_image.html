@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传</title>
+</head>
+
+<body>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+<fieldset>
+
+<legend>上传文件</legend>
+
+<input type="file" name="docfile" />
+
+<input type="submit" value="上传"/>
+
+</fieldset>
+
+</form>
+<p>image: {{ photos.image.url }}</p>
+{% for i in photos %}
+    <p>aaaa:{{i.image.url}}</p>
+    <img class="thumbnail media-photo" src="{{ i.image.url }}" >
+{%endfor%}
+
+{% if photos.image %}<img src="{{ photos.image.url }}" />{% endif %}
+
+<img class="thumbnail media-photo" src="{{MEDIA_URL}}/llon2017-06-14_162706.009205.jpg" >
+
+</body>
+</html>

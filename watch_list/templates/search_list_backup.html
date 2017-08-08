@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Search result{% endblock %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {% if is_exist %}
+        <h3 align="center">您搜尋的項目已存在</h3>
+    {% endif %}
+    <table align="center">
+        {% for i in one_page_data %}
+            {% if forloop.first %}
+                <tr><th align="left"><input type="submit" value="加入我的列表" name="add_to_mywatch"></th></tr>
+                <tr>
+                    <th><label>加入列表</label></th>
+                    <th><label>名稱</label></th>
+                    <th><label>總集數</label></th>
+                    <th><label>出版日期</label></th>
+                </tr>
+            {% endif %}
+            <tr>
+                {% if i.id in user_animid_list %}
+                    <td align="center">已在列表</td>
+                {% else %}
+                    <td align="center"><input type="checkbox" name="selected_anime" value="{{ i.id }}"></td>
+                {% endif %}
+                <th align="center"><a href="/watch_data/{{ i.id  }}/">{{ i.name  }}</a></th>
+                <td align="center">{{ i.total }}</td>
+                <td align="center">{{ i.publication_date }} </td>
+                <!--<td><input type="hidden" value="{{ i.id }}" name="anime_id_{{ forloop.counter }}"></td>-->
+            </tr>
+        {% empty %}
+            <tr><th><div class="no-post">
+                沒有符合條件的結果
+            </div></th></tr>
+        {% endfor %}
+    </table>
+    {# pages #}
+    {% csrf_token %}
+    <div class="center">
+        <p>共 {{pages.count}} 個項目 ， 目前第 {{one_page_data.number}} 頁 ， 共 {{pages.num_pages}} 頁</p>
+        <ul class="pagination">
+            {# previous page，uses has_previous #}
+            <li><a href="?page={% if one_page_data.has_previous %}{{one_page_data.previous_page_number}}&keyword={{ in_keyword }}{% else %}{{one_page_data.number}}&keyword={{ in_keyword }}{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+
+            {# get all page #}
+            {% for page in pages.page_range %}
+                {% ifequal  page one_page_data.number %}
+                    <li><a class="active" href="?page={{page}}&keyword={{ in_keyword }}">{{page}}</a></li>
+                {% else %}
+                    <li><a href="?page={{page}}&keyword={{ in_keyword }}">{{page}}</a></li>
+                {% endifequal %}
+            {% endfor %}
+
+            {# next page，uses has_next #}
+            <li><a href="?page={% if one_page_data.has_next %}{{one_page_data.next_page_number}}&keyword={{ in_keyword }}{% else %}{{one_page_data.number}}&keyword={{ in_keyword }}{% endif %}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        </ul>
+    </div>
+</form>
+
+{% endblock %}

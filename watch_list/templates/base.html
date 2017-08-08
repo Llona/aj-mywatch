@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+{% load staticfiles %}
+{% load i18n %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    <!-- Bootstrap -->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">#}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    {% block link %} {% endblock %}
+    <style type="text/css">
+    .dcolor {
+        color:#3A454F;
+    }
+    .lcolor {
+        color:#F9F9F9;
+    }
+    .btn-primary {
+        background-color:#043D8C;
+        color:#F9F9F9;
+        border-color:#14325C;
+    }
+    .btn-danger {
+        background-color:#8A140E;
+        color:#F9F9F9;
+        border-color:#8A140E;
+    }
+    .panel-primary .panel-heading{
+        background-color:#14325C;
+        color:#F9F9F9;
+    }
+    .panel-primary{
+        border-color:#14325C;
+    }
+    .panel-body {
+        word-break:break-all;
+    }
+    {% block style %} {% endblock %}
+    </style>
+</head>
+<body class="dcolor" style="background-color:#EEEEEE;padding-top:70px;font-family:Arial, 微軟正黑體, Microsoft JhengHei, Times New Roman">
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color:#253F5B;" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/"><span class="lcolor">AJ-MyWatch</span></a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myInverseNavbar" aria-expanded="false">
+                <span class="sr-only lcolor"></span>
+                <span class="icon-bar lcolor"></span>
+                <span class="icon-bar lcolor"></span>
+                <span class="icon-bar lcolor"></span>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="myInverseNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                <li><a href="/my_watch/"><span class="lcolor">我的列表</span></a></li>
+                {% endif %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="lcolor">本站項目<span class="caret"></span></span></a>
+                    <ul class="dropdown-menu lcolor">
+                        <li><a href="/watch_data/">所有項目</a></li>
+                        <li><a href="/search_add/">新增項目</a></li>
+                        <li><a href="/search_add/">搜尋項目</a></li>
+                    </ul>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="lcolor">帳號<span class="caret"></span></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a>Hi! {{request.user.username}}</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="disabled"><a href="#">帳戶資料(施工中)</a></li>
+                            <li><a href={% url "account_change_password" %}>修改密碼</a></li>
+                            <li><a href="{% url "account_email" %}">修改E-mail</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/accounts/logout/">登出</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                <li><a href={% url "account_signup" %}><span class="lcolor">{% trans "Sign Up" %}</span></a></li>
+                {% endif %}
+                <li>
+                    <form class="navbar-form" method="get" action="/item_search/" role="search">
+                        <div class="input-group pull-right">
+                            <input type="search" class="form-control" title="請輸入搜尋關鍵字" placeholder="Search" name="keyword" required>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default btn-block" type="submit">搜尋</button>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block content %} {% endblock %}
+<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

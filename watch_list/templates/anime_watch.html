@@ -1,0 +1,22 @@
+<!-- hello_world.html -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>I come from template!!</title>
+        <style>
+            body {
+               background-color: lightyellow;
+            }
+            em {
+                color: LightSeaGreen;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Hello! {{username}}</h1>
+        <em>{{ current_time }}</em><p></p>
+        <em>{{ email }}</em>
+        <p>You have been successfully log in. You can <a href="{% url 'logout' %}">log-out</a></p>
+    </body>
+</html>

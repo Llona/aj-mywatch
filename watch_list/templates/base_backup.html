@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<style>
+    ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul.pagination li {display: inline;}
+
+    ul.pagination li a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+    }
+
+    ul.pagination li a.active {
+        background-color: #7bade0;
+        color: white;
+        border: 1px solid #7bade0;
+    }
+
+    ul.pagination li a:hover:not(.active) {background-color: #ddd;}
+
+    div.center {text-align: center;}
+
+    a {
+        color:blue;
+        text-decoration:none;
+    }
+
+    input[type="submit"]{
+        padding:5px 15px; background:#ccc; border:0 none;
+        cursor:pointer;
+         -webkit-border-radius: 5px;
+        border-radius: 5px; }
+
+    input[type="text"]{
+        padding:3px 5px; border:1px black solid; width:110px;
+         -webkit-border-radius: 5px;
+        border-radius: 5px; }
+
+    <!--button {-->
+        <!--style="width:120px;height:40px;border:2px blue none;background-color:pink;"-->
+    <!--}-->
+</style>
+<body>
+    <form method="get" action="/item_search/">
+        {% csrf_token %}
+        <p align="right">
+            <a href="/my_watch/">我的列表</a>
+            <a href="/accounts/logout/">登出</a>
+            <input type="search" placeholder="搜尋" name="keyword" required >
+            <!--<button type="submit" >搜尋</button>-->
+            <input type="submit" value="搜尋">
+        </p>
+    </form>
+    <hr>
+    {% block content %} {% endblock %}
+</body>
+</html>

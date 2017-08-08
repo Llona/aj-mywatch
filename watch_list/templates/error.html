@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}錯誤!{% endblock %}
+{% block content %}
+
+{% ifequal ERROR_TYPE 1 %}
+    <form method="get" action="{{ request.get_full_path }}">
+        {% csrf_token %}
+        <h3 align="center">錯誤! 您上傳的圖片超過指定的大小, 如有疑問請連絡管理員</h3>
+        <hr>
+        <p align="center">
+            <button class="btn btn-primary" type="submit" name="goto_data">回到封面上傳頁面</button>
+        </p>
+        <hr>
+    </form>
+{% else %}
+    {% ifequal ERROR_TYPE 2%}
+    <form method="get" action="{{ request.get_full_path }}">
+        {% csrf_token %}
+        <h3 align="center">錯誤! 封面圖片上傳失敗, 如有疑問請連絡管理員</h3>
+        <hr>
+        <p align="center">
+            <button class="btn btn-primary" type="submit" name="goto_data">回到封面上傳頁面</button>
+        </p>
+        <hr>
+    </form>
+
+    {% else %}
+
+        <form method="get" action="/my_watch/">
+            {% csrf_token %}
+            <h3 align="center">錯誤! 找不到您指定的頁面, 如有疑問請連絡管理員</h3>
+            <hr>
+            <p align="center">
+                <button class="btn btn-primary" type="submit" name="goto_my_watch">回到我的觀看</button>
+            </p>
+            <hr>
+        </form>
+    {% endifequal %}
+{% endifequal %}
+
+{% endblock %}

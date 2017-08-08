@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% block title %}Data{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h4>
+                    {% ifequal is_creator 1 %}
+                        上傳{{ anime_data_model_h.name }}封面
+                    {% else %}
+                        {{ anime_data_model_h.name }}封面圖片
+                    {% endifequal %}
+                    </h4>
+                </div>
+                <div class="panel-body ">
+                    {% if anime_data_model_h.cover %}
+                        <img class="center-block img-responsive img-thumbnail" src="{{ anime_data_model_h.cover.url }}" />
+                    {% else %}
+                        {% load staticfiles %}
+                        <img class="center-block img-responsive img-thumbnail" src="{% static 'images/nocover.png' %}" >
+                    {% endif %}
+                    <hr><br>
+                    {% ifequal is_creator 1 %}
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label">上傳封面圖片</label>
+                                <input class="form-control file-loading" type="file" name="imgfile" />
+                                <span class="help-block">&nbsp;&nbsp;&nbsp;本站資源有限, 上傳大小限制為50k, 感謝大家的體諒</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="upload_img">上傳</button>
+                        </form>
+                    {% endifequal %}
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading"><h4>{{ anime_data_model_h.name }} 詳細資料</h4></div>
+                <div class="panel-body ">
+                    <h5>項目資訊與您的觀看</h5>
+                    <hr>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% ifequal is_owner 1 %}
+                            <div class="form-group">
+                                <label class="control-label">名稱:&nbsp</label>
+                                {{ anime_data_model_h.name }}
+                            </div>
+                            {% ifequal is_creator 1 %}
+                                <div class="form-group">
+                                    <label class="control-label">原名稱:&nbsp</label>
+                                    {{ f.origin_name }} {{ f.origin_name.errors }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">觀看集數:&nbsp</label>
+                                    {{ f.watch_num_of_chapter }}{{ f.watch_num_of_chapter.errors }}
+                                </div>
+                            {% else %}
+                                <div class="form-group">
+                                    <label class="control-label">原名稱:&nbsp</label>
+                                    {{ anime_data_model_h.origin_name }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">觀看集數:&nbsp</label>
+                                    <input type="text" class="form-control" value="{{ watch_data_model.num_of_chapter }}" name="num_of_chapter">
+                                </div>
+                            {% endifequal %}
+                            <div class="form-group ">
+                                <label class="control-label">觀看狀態</label>
+                                <select class="form-control" name="watch_state">
+                                    {% ifequal watch_data_model.watch_state 1 %}
+                                        <option value=1 selected>未觀看</option>
+                                        <option value=2>觀看中</option>
+                                        <option value=3>已看完</option>
+                                    {% else %}
+                                        {% ifequal watch_data_model.watch_state 2 %}
+                                            <option value=1>未觀看</option>
+                                            <option value=2 selected>觀看中</option>
+                                            <option value=3>已看完</option>
+                                        {% else %}
+                                            {% ifequal watch_data_model.watch_state 3 %}
+                                                <option value=1>未觀看</option>
+                                                <option value=2>觀看中</option>
+                                                <option value=3 selected>已看完</option>
+                                            {% endifequal %}
+                                        {% endifequal %}
+                                    {% endifequal %}
+                                </select>
+                            </div>
+                            {% ifequal is_creator 1 %}
+                                <div class="form-group ">
+                                    <label class="control-label">網址:&nbsp</label>
+                                    {{ f.url }} {{ f.url.errors }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">總集數:&nbsp</label>
+                                    {{ f.total }} {{ f.total.errors }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">類型:&nbsp</label>
+                                    {{ f.type }} {{ f.type.errors }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">發行日期:&nbsp</label>
+                                    {{ f.publication_date }} {{ f.publication_date.errors }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">簡介:&nbsp</label>
+                                    {{ f.summary }} {{ f.summary.errors }}
+                                </div>
+
+                                <!--hide original data for check user is modify or not-->
+                                <input type="hidden" value="{{ anime_data_model_h.origin_name }}" name="origin_name_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.url }}" name="url_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.total }}" name="total_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.type }}" name="type_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.publication_date|date:"Y-m-d" }}" name="publication_date_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.summary }}" name="summary_ori">
+                            {% else %}
+                                <div class="form-group ">
+                                    <label class="control-label">網址:&nbsp</label>
+                                    {{ anime_data_model_h.url }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">總集數:&nbsp</label>
+                                    {{ anime_data_model_h.total }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">類型:&nbsp</label>
+                                    {{ anime_data_model_h.type }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">發行日期:&nbsp</label>
+                                    {{ anime_data_model_h.publication_date }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">簡介:&nbsp</label>
+                                    {{ anime_data_model_h.summary }}
+                                </div>
+                            {% endifequal %}
+                            <div class="form-group ">
+                                <label class="control-label">最近觀看日期:&nbsp</label>
+                                {{ watch_data_model.watch_last_date }}
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label">最近修改日期:&nbsp</label>
+                                {{ watch_data_model.anime.modify_date }}
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label">Creator:&nbsp</label>
+                                {{ watch_data_model.anime.creator }}
+                            </div>
+                            <input type="hidden" value="{{ watch_data_model.num_of_chapter }}" name="num_of_chapter_ori">
+                            <input type="hidden" value="{{ watch_data_model.watch_state }}" name="watch_state_ori">
+
+                            <button type="submit" class="btn btn-primary" name="renew_data">更新</button>
+                            <button type="submit" class="btn btn-default" name="cancel">取消</button>
+                        {% else %}
+                            <div class="form-group">
+                                <label class="control-label">名稱:&nbsp</label>
+                                {{ anime_data_model_h.name  }}
+                            </div>
+                            {% ifequal is_creator 1 %}
+                                <div class="form-group">
+                                    <label class="control-label">原名稱:&nbsp</label>
+                                    {{ f.origin_name }} {{ f.origin_name.errors }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">網址:&nbsp</label>
+                                    {{ f.url }} {{ f.url.errors }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">總集數:&nbsp</label>
+                                    {{ f.total }} {{ f.total.errors }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">類型:&nbsp</label>
+                                    {{ f.type }} {{ f.type.errors }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">發行日期:&nbsp</label>
+                                    {{ f.publication_date }} {{ f.publication_date.errors }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">簡介:&nbsp</label>
+                                    {{ f.summary }} {{ f.summary.errors }}
+                                </div>
+
+                                <!--hide original data for check user is modify or not-->
+                                <input type="hidden" value="{{ anime_data_model_h.origin_name }}" name="origin_name_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.url }}" name="url_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.total }}" name="total_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.type }}" name="type_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.publication_date|date:"Y-m-d" }}" name="publication_date_ori">
+                                <input type="hidden" value="{{ anime_data_model_h.summary }}" name="summary_ori">
+                            {% else %}
+                                <div class="form-group">
+                                    <label class="control-label">原名稱:&nbsp</label>
+                                    {{ anime_data_model_h.origin_name }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">網址:&nbsp</label>
+                                    <br>{{ anime_data_model_h.url }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">總集數:&nbsp</label>
+                                    {{ anime_data_model_h.total }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">類型:&nbsp</label>
+                                    {{ anime_data_model_h.type }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">發行日期:&nbsp</label>
+                                    {{ anime_data_model_h.publication_date }}
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">簡介:&nbsp</label>
+                                    <br>{{ anime_data_model_h.summary }}
+                                </div>
+                            {% endifequal %}
+                            <div class="form-group">
+                                <label class="control-label">最近修改日期:&nbsp</label>
+                                {{ anime_data_model_h.modify_date }}
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Creator:&nbsp</label>
+                                {{ anime_data_model_h.creator }}
+                            </div>
+
+                            {% ifequal is_creator 1 %}
+                                <button type="submit" name="renew_data">更新</button>
+                            {% endifequal %}
+                            <button type="submit" name="cancel">離開</button>
+                        {% endifequal %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

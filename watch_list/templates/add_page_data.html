@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Add page{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h4>新增項目</h4></div>
+                <div class="panel-body ">
+                    <h5>新增的項目只能修改無法刪除, 請仔細確認後再送出</h5>
+                    <hr>
+                    <form action='' method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="control-label">名稱</label>
+                            {{ f.name }} {{ f.name.errors }}
+                            <span class="help-block">&nbsp;&nbsp;&nbsp;名稱建立後即無法修改, 請確認好再送出喔</span>
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">原名稱</label>
+                            {{ f.origin_name }} {{ f.origin_name.errors }}
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">介紹網址</label>
+                            {{ f.url }} {{ f.url.errors }}
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">總集數</label>
+                            {{ f.total }} {{ f.total.errors }}
+                        </div>
+
+                        <div class="form-group ">
+                            <label class="control-label">類型</label>
+                            {{ f.type }} {{ f.type.errors }}
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">媒體類型</label>
+                            {{ f.media_type }} {{ f.media_type.errors }}
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">發行日期</label>
+                            {{ f.publication_date }} {{ f.publication_date.errors }}
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">觀看集數</label>
+                            {{ f.watch_num_of_chapter }} {{ f.watch_num_of_chapter.errors }}
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">觀看狀態</label>
+                            <select class="form-control" name="watch_state">
+                                <option value=1 selected>未觀看</option>
+                                <option value=2>觀看中</option>
+                                <option value=3>已看完</option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">最近觀看日期</label>
+                            {{ f.watch_last_date }} {{ f.watch_last_date.errors }}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">加入我的列表</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="add_to_list" value="yes" checked>是
+                                </label>
+                                <label>
+                                    <input type="radio" name="add_to_list" value="no">否
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label">劇情簡介</label>
+                            {{ f.summary }} {{ f.summary.errors }}
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="add_item">新增並上傳封面</button>
+                        <button type="submit" class="btn btn-primary" name="add_next_item">新增下一筆</button>
+                        <button type="submit" class="btn btn-default" name="cancel">取消</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+
+{% endblock %}

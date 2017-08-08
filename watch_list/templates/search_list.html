@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}my watch list{% endblock %}
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/watch_list.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="container">
+<!--<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>-->
+    {# pages #}
+    <div align="center">
+        {# <br>共 {{pages_h.count}} 個項目 ， 目前第 {{current_page_data.number}} 頁 ， 共 {{pages_h.num_pages}} 頁</br> #}
+        <ul class="pagination">
+            {% ifnotequal page_range|first 1 %}
+                <li><a href="?page=1&keyword={{ in_keyword }}" aria-label="Previous"><span aria-hidden="true">&laquo;&laquo;</span></a></li>
+            {% endifnotequal %}
+            {% if current_page_data.has_previous %}
+                <li><a href="?page={{current_page_data.previous_page_number}}&keyword={{ in_keyword }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% endif %}
+            {# get all page #}
+            {% for page in page_range %}
+                {% ifequal  page current_page_data.number %}
+                    <li><a class="active" href="?page={{page}}&keyword={{ in_keyword }}">{{page}}</a></li>
+                {% else %}
+                    <li><a href="?page={{page}}&keyword={{ in_keyword }}">{{page}}</a></li>
+                {% endifequal %}
+            {% endfor %}
+            {% if current_page_data.has_next %}
+                <li><a href="?page={{current_page_data.next_page_number}}&keyword={{ in_keyword }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+            {% endif %}
+            {% ifnotequal page_range|last pages_h.num_pages %}
+                <li><a href="?page={{pages_h.num_pages}}&keyword={{ in_keyword }}" aria-label="Next"><span aria-hidden="true">&raquo;&raquo;</span></a></li>
+            {% endifnotequal %}
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form action="" class="form-inline" method="post">
+                  {% csrf_token %}
+                <div class="panel panel-info">
+                    <div class="panel-heading ">
+                        {% if is_exist %}
+                            <h3 align="center">您新增的項目已存在</h3>
+                        {% else %}
+                            <h4>符合"{{ in_keyword }}"的項目</h4>
+                        {% endif %}
+                    </div>
+                    <div class="panel-body">
+                        <div class="pull-left">
+                            <!--<div class="btn-group">-->
+                            <button type="submit" class="btn btn-primary" name="add_to_mywatch">加入我的列表</button>
+                            <!--</div>-->
+                        </div>
+                        <br><br>
+
+                            <table align="center" class="table table-striped">
+                                {% for i in current_page_data %}
+                                    {% if forloop.first %}
+                                        <tr>
+                                            <th><label>#</label></th>
+                                            <th><label>名稱</label></th>
+                                            <th><label>總集數</label></th>
+                                            <th><label>出版日期</label></th>
+                                        </tr>
+                                    {% endif %}
+                                        <tr>
+                                            {% if i.id in user_animid_list %}
+                                                <td><input type="checkbox" name="selected_anime" value="{{ i.id }}" checked="checked" disabled></td>
+                                            {% else %}
+                                                <td><input type="checkbox" name="selected_anime" value="{{ i.id }}"></td>
+                                            {% endif %}
+                                            <th ><a href="/watch_data/{{ i.id  }}/">{{ i.name  }}</a></th>
+                                            <td >{{ i.total }}</td>
+                                            <td >{{ i.publication_date }} </td>
+                                        </tr>
+                                {% empty %}
+                                    <tr><th><div class="">
+                                        沒有符合條件的結果
+                                    </div></th></tr>
+                                {% endfor %}
+
+                            </table>
+                            <hr>
+                            <div class="pull-left">
+                                <button type="submit" class="btn btn-primary" name="add_to_mywatch">加入我的列表</button>
+                            </div>
+
+                    </div>
+                </div>
+                <div align="center">
+                    {# <br>共 {{pages_h.count}} 個項目 ， 目前第 {{current_page_data.number}} 頁 ， 共 {{pages_h.num_pages}} 頁</br> #}
+                    <ul class="pagination">
+                        {% ifnotequal page_range|first 1 %}
+                            <li><a href="?page=1&keyword={{ in_keyword }}" aria-label="Previous"><span aria-hidden="true">&laquo;&laquo;</span></a></li>
+                        {% endifnotequal %}
+                        {% if current_page_data.has_previous %}
+                            <li><a href="?page={{current_page_data.previous_page_number}}&keyword={{ in_keyword }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        {% endif %}
+                        {# get all page #}
+                        {% for page in page_range %}
+                            {% ifequal  page current_page_data.number %}
+                                <li><a class="active" href="?page={{page}}&keyword={{ in_keyword }}">{{page}}</a></li>
+                            {% else %}
+                                <li><a href="?page={{page}}&keyword={{ in_keyword }}">{{page}}</a></li>
+                            {% endifequal %}
+                        {% endfor %}
+                        {% if current_page_data.has_next %}
+                            <li><a href="?page={{current_page_data.next_page_number}}&keyword={{ in_keyword }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                        {% endif %}
+                        {% ifnotequal page_range|last pages_h.num_pages %}
+                            <li><a href="?page={{pages_h.num_pages}}&keyword={{ in_keyword }}" aria-label="Next"><span aria-hidden="true">&raquo;&raquo;</span></a></li>
+                        {% endifnotequal %}
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
