@@ -10,8 +10,8 @@ class WatchListForm(forms.Form):
     cover = forms.ImageField(required=False)
     origin_name = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
     media_type = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
-    url = forms.CharField(max_length=300, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
-    summary = forms.CharField(max_length=2000, required=False,widget=forms.Textarea(attrs={'rows': 8, 'class': "form-control"}))
+    url = forms.CharField(max_length=350, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
+    summary = forms.CharField(max_length=5000, required=False, widget=forms.Textarea(attrs={'rows': 8, 'class': "form-control"}))
 
 
 class WatchAddForm(forms.Form):
@@ -23,8 +23,8 @@ class WatchAddForm(forms.Form):
     watch_num_of_chapter = forms.CharField(max_length=50, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
     origin_name = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
     media_type = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
-    url = forms.CharField(max_length=300, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
-    summary = forms.CharField(max_length=2000, required=False, widget=forms.Textarea(attrs={'rows': 8, 'class': "form-control"}))
+    url = forms.CharField(max_length=350, required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
+    summary = forms.CharField(max_length=5000, required=False, widget=forms.Textarea(attrs={'rows': 8, 'class': "form-control"}))
     cover = forms.ImageField(required=False)
 
 

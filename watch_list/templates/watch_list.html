@@ -109,7 +109,7 @@
                                                             </div>
                                                             <div class="word-break hidden-xs">
                                                                 {% if i.anime.summary %}
-                                                                    <p>{{ i.anime.summary }}</p>
+                                                                    <p>{{ i.anime.summary|truncatechars:140|linebreaks }}</p>
                                                                 {% else %}
                                                                     <p>暫無簡介
                                                                 {% endif %}

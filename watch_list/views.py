@@ -493,27 +493,21 @@ def watch_add(request):
 def auto_update_add_save_item(request, f, name):
     # Add new data to anime table
     total = f.cleaned_data['total']
-    if total == 0 or total == '' or total == ' ':
-        anime_new_h = Anime.objects.create(name=name,
-                                           origin_name=f.cleaned_data['origin_name'],
-                                           url=f.cleaned_data['url'],
-                                           media_type=f.cleaned_data['media_type'],
-                                           type='',
-                                           publication_date=f.cleaned_data['publication_date'],
-                                           creator=request.user,
-                                           summary=f.cleaned_data['summary'],
-                                           modify_date=datetime.utcnow() + timedelta(hours=8))
-    else:
-        anime_new_h = Anime.objects.create(name=name,
-                                           origin_name=f.cleaned_data['origin_name'],
-                                           url=f.cleaned_data['url'],
-                                           media_type=f.cleaned_data['media_type'],
-                                           total=total,
-                                           type=f.cleaned_data['type'],
-                                           publication_date=f.cleaned_data['publication_date'],
-                                           creator=request.user,
-                                           summary=f.cleaned_data['summary'],
-                                           modify_date=datetime.utcnow() + timedelta(hours=8))
+    try:
+        int(total)
+    except:
+        total = 0
+
+    anime_new_h = Anime.objects.create(name=name,
+                                       origin_name=f.cleaned_data['origin_name'],
+                                       url=f.cleaned_data['url'],
+                                       media_type=f.cleaned_data['media_type'],
+                                       total=total,
+                                       type=f.cleaned_data['type'],
+                                       publication_date=f.cleaned_data['publication_date'],
+                                       creator=request.user,
+                                       summary=f.cleaned_data['summary'],
+                                       modify_date=datetime.utcnow() + timedelta(hours=8))
 
     # Add to request user watch list
     if request.POST['add_to_list'] == 'yes':
@@ -542,9 +536,55 @@ def auto_update_item_only(request):
             # get templeats and form data
             name = f.cleaned_data['name']
 
-            if Anime.objects.filter(name=name).count() > 0:
-                # item name already exist, go to search page for user add this item
-                return HttpResponse('duplicate')
+            anime_search_h = Anime.objects.filter(name=name)
+
+            item_total_count = anime_search_h.count()
+
+            if item_total_count > 0:  # item name already exist
+                anime_wiki_h = Anime.objects.select_related('creator').filter(name=name).filter(creator__username='william_liu')
+                item_wiki_count = anime_wiki_h.count()
+                if item_wiki_count == 1:  # this is modify from wiki
+                    total = f.cleaned_data['total']
+                    try:
+                        int(total)
+                    except:
+                        total = 0
+
+                    anime_wiki_h.update(origin_name=f.cleaned_data['origin_name'],
+                                         url=f.cleaned_data['url'],
+                                         media_type=f.cleaned_data['media_type'],
+                                         total=total,
+                                         type=f.cleaned_data['type'],
+                                         publication_date=f.cleaned_data['publication_date'],
+                                         # creator=request.user,
+                                         summary=f.cleaned_data['summary'],
+                                         modify_date=datetime.utcnow() + timedelta(hours=8))
+
+                    anime_model_h = anime_wiki_h[0]
+
+                    if 'imgfile' in request.FILES:
+                        image = request.FILES["imgfile"]
+                        print(' ')
+                        print(image.name)
+                        print(' ')
+                        # if already has cover file, remove first
+                        if anime_model_h.cover:
+                            if os.path.isfile(anime_model_h.cover.path):
+                                os.remove(anime_model_h.cover.path)
+
+                        # rename cover image file name
+                        img_filename, img_ext = os.path.splitext(image.name)
+                        cover_name = '%s_%s%s' % (img_filename, str(datetime.now()), img_ext)
+
+                        # save user upload file into database and MEDIA_ROOT path
+                        anime_model_h.cover.save(cover_name, image, save=True)
+
+                    if item_wiki_count > item_wiki_count:
+                        return HttpResponse('duplicate')
+                    else:
+                        return HttpResponse('renew')
+                else:
+                    return HttpResponse('dup_wiki')
 
             # create new anime table
             anime_new_h = auto_update_add_save_item(request, f, name)
@@ -567,16 +607,11 @@ def auto_update_item_only(request):
             #     return HttpResponse(temp_text)
 
             return HttpResponse('success')
+
         # user input has format error
-        # return render_to_response(request.get_full_path())
         return HttpResponse('error')
     else:
         f = WatchAddForm()
-        # f = WatchListForm(None, initial={'total': watch_data_model.anime.total,
-        #                                  'type': watch_data_model.anime.type,
-        #                                  'publication_date': watch_data_model.anime.publication_date,
-        #                                  'watch_num_of_chapter': watch_data_model.num_of_chapter})
-
         return render_to_response('auto_update_item.html', locals(), context_instance=RequestContext(request))
 
 
