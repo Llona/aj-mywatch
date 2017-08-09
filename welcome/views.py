@@ -21,4 +21,4 @@ def index(request):
 
 def health(request):
     # return HttpResponse(PageView.objects.count())
-    return HttpResponseRedirect('/index/')
+    return HttpResponse('1')
