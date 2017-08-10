@@ -42,7 +42,7 @@ class Anime(models.Model):
     media_type = models.CharField(max_length=50, blank=True)
     type = models.CharField(max_length=50, blank=True)
     publication_date = models.CharField(max_length=30, blank=True)
-    url = models.CharField(max_length=350, blank=True)
+    url = models.CharField(max_length=300, blank=True)
     cover = models.ImageField(upload_to='covers/', blank=True, null=True)
     summary = models.TextField(max_length=5000, blank=True)
     modify_date = models.DateTimeField(default=(datetime.utcnow() + timedelta(hours=8)), null=True)
