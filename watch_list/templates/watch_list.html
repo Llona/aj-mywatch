@@ -53,13 +53,22 @@
                                                         </a>
                                                     </div>
                                                     <div class="media-body">
-                                                        <h4 class="word-break title col-xs-12 col-md-10 col-sm-10 col-lg-12">
-                                                            <a href="/watch_data/{{ i.anime.id }}/">
-                                                            <span class="text-left">{{ i.anime.name  }}</span></a>
-                                                            {% if i.anime.origin_name %}
-                                                                <span class="sub-title"><em>&nbsp;&nbsp;-&nbsp;&nbsp;{{ i.anime.origin_name }}</em></span>
-                                                            {% endif %}
-                                                        </h4>
+                                                        <div class="visible-xs">
+                                                            <h4 class="word-break title col-xs-12 text-center">
+                                                                <a href="/watch_data/{{ i.anime.id }}/"><span>{{ i.anime.name  }}</span></a>
+                                                                {% if i.anime.origin_name %}
+                                                                    <span class="sub-title"><em>&nbsp;&nbsp;-&nbsp;&nbsp;{{ i.anime.origin_name }}</em></span>
+                                                                {% endif %}
+                                                            </h4>
+                                                        </div>
+                                                        <div class="hidden-xs">
+                                                            <h4 class="word-break title col-md-10 col-sm-10 col-lg-12 text-left">
+                                                                <a href="/watch_data/{{ i.anime.id }}/"><span>{{ i.anime.name  }}</span></a>
+                                                                {% if i.anime.origin_name %}
+                                                                    <span class="sub-title"><em>&nbsp;&nbsp;-&nbsp;&nbsp;{{ i.anime.origin_name }}</em></span>
+                                                                {% endif %}
+                                                            </h4>
+                                                        </div>
                                                         <div class="col-xs-12 col-sm-6">
                                                             <div style="padding: 0px 0px 0px;">
                                                                 <div class="input-group">
