@@ -71,8 +71,8 @@ AUTHENTICATION_BACKENDS = (
 
 # uses mailgun for send mail
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-MAILGUN_ACCESS_KEY = 'key-78a64ead8b0c52ea18423a436a4ee2f9'
-MAILGUN_SERVER_NAME = 'sandbox5a5bbc85441d4cea88c496bba9504faa.mailgun.org'
+MAILGUN_ACCESS_KEY = os.getenv('MAILGUN_ACCESS_KEY')
+MAILGUN_SERVER_NAME = os.getenv('MAILGUN_SERVER_NAME')
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
