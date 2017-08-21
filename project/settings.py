@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'watch_list',
     'debug_toolbar',
     # 'accounts',
+    'storages',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
