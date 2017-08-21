@@ -5,6 +5,8 @@ Django==1.8.18
 django-allauth==0.32.0
 django-debug-toolbar==1.5
 django-mailgun==0.9.1
+django-storages==1.6.5
+dropbox==8.0.0
 gunicorn==19.7.1
 idna==2.5
 oauthlib==2.0.2
